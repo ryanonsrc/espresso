@@ -22,7 +22,7 @@ object Syntax {
   }
 
   def strF(k: Key) =
-    read[EvalError, String, Key, Source](k, Err(EvalError(s"key missing: $k")),
+    read[EvalError, String, Key, Source](k, EvalError(s"key missing: $k"),
       (s: Source) =>
         (k: Key) =>
           (in: In[EvalError, String]) =>
