@@ -6,7 +6,7 @@ package io.nary.espresso.sample
 object Main {
   def main(args: Array[String]) {
     val map : Map[String, Any] =
-      Map("foo" -> "fig", "bar" -> "banana", "baz" -> "blueberry")
+      Map("foo" → "fig", "bar" → "banana", "baz" → "blueberry")
 
     import Syntax._
 
