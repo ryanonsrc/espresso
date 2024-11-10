@@ -1,64 +1,87 @@
 /**
-  * Created by ryan on 8/21/16.
-  */
+ * Code generation utilities for espresso.
+ * Updated for modern Scala syntax and conventions.
+ */
 object Gen {
-  def genOp(start: Int, end: Int) : Unit = {
-    for(i ← start to end) {
-      val typeParams = (1 to i).map(x => "A" + x).mkString("[E, ", ", ", ", B]")
+  def genOp(start: Int, end: Int): Unit = {
+    for (i <- start to end) {
+      val typeParams = (1 to i).map(x => s"A$x").mkString("[E, ", ", ", ", B]")
       val fDom = (1 to i).map(x => s"Term[E, A$x]").mkString(" :: ") + " :: HNil"
-      val ret = (1 to i).map(x => "A" + x).mkString(" :: ") + " :: HNil"
-      val args = (1 to i).map(x => "a" + x).mkString(" :: ") + " :: HNil"
-      val app = (1 to i).map(x => s"Applicative[λ[α ⇒ Term[E, α]]].pure(a$x)").mkString(" :: ") + " :: HNil"
+      val ret = (1 to i).map(x => s"A$x").mkString(" :: ") + " :: HNil"
+      val args = (1 to i).map(x => s"a$x").mkString(" :: ") + " :: HNil"
+      val app = (1 to i).map(x => s"Applicative[Lambda[α => Term[E, α]]].pure(a$x)").mkString(" :: ") + " :: HNil"
 
-      val s = s"""def op$i$typeParams(f: ($fDom) ⇒ Term[E, B]) : Expr[E, $ret, B] =
-              | Kleisli[λ[α ⇒ Term[E, α]], $ret, B] { case $args ⇒
-              |  f($app)
-              | }
-              """.stripMargin
+      val s =
+        s"""def op$i$typeParams(f: ($fDom) => Term[E, B]): Expr[E, $ret, B] =
+           |  Kleisli[Lambda[α => Term[E, α]], $ret, B] { case $args =>
+           |    f($app)
+           |  }""".stripMargin
 
       println(s)
     }
   }
 
-  def genJoin(start: Int, end: Int) : Unit = {
-    for(i ← start to end) {
-      val typeParams = (1 to i).map(x => "B" + x).mkString("[E, A, ", ", ", "]")
+  def genJoin(start: Int, end: Int): Unit = {
+    for (i <- start to end) {
+      val typeParams = (1 to i).map(x => s"B$x").mkString("[E, A, ", ", ", "]")
       val operands = (1 to i).map(x => s"Expr[E, A, B$x]").mkString(" :: ") + " :: HNil"
-      val ret = (1 to i).map(x => "B" + x).mkString(" :: ") + " :: HNil"
-      val args = (1 to i).map(x => "b" + x).mkString(" :: ") + " :: HNil"
-      val app = (1 to i).map(x => s"b$x.run(a)").mkString(" |@| ")
-      val appMap = (1 to i).map(_ ⇒ "_").mkString(" :: ") + " :: HNil"
+      val ret = (1 to i).map(x => s"B$x").mkString(" :: ") + " :: HNil"
+      val args = (1 to i).map(x => s"b$x").mkString(" :: ") + " :: HNil"
+
+      // Replace |@| with modern tuple syntax and mapN
+      val runCalls = (1 to i).map(x => s"b$x.run(a)")
+      val app = if (i == 1) {
+        s"${runCalls.head}.map"
+      } else {
+        s"(${runCalls.mkString(", ")}).mapN"
+      }
+
+      val appMap = (1 to i).map(_ => "_").mkString(" :: ") + " :: HNil"
 
       val s =
-        s"""
-           |def join$i$typeParams(operands: $operands) : Expr[E, A, $ret] =
-           |    Kleisli[λ[α ⇒ Term[E, α]], A, $ret] { a ⇒ operands match {
-           |      case $args ⇒ ($app).map($appMap)
-           |    }
-           |  }
-         """.stripMargin
+        s"""def join$i$typeParams(operands: $operands): Expr[E, A, $ret] =
+           |  Kleisli[Lambda[α => Term[E, α]], A, $ret] { a => operands match {
+           |    case $args => $app($appMap)
+           |  }}""".stripMargin
 
       println(s)
     }
   }
 
-  def genEval(start: Int, end: Int) : Unit = {
-    for(i ← start to end) {
-      val bs = (1 to i).map(x => "B" + x).mkString(", ")
-      val abArgs = (1 to i).map(x ⇒ s"b$x: Expr[E, A, B$x]").mkString(", ")
-      val bhlist = (1 to i).map(x ⇒ "B" + x).mkString(" :: ") + " :: HNil"
-      val abhlist = (1 to i).map(x ⇒ s"b$x").mkString(" :: ")  + " :: HNil"
+  def genEval(start: Int, end: Int): Unit = {
+    for (i <- start to end) {
+      val bs = (1 to i).map(x => s"B$x").mkString(", ")
+      val abArgs = (1 to i).map(x => s"b$x: Expr[E, A, B$x]").mkString(", ")
+      val bhlist = (1 to i).map(x => s"B$x").mkString(" :: ") + " :: HNil"
+      val abhlist = (1 to i).map(x => s"b$x").mkString(" :: ") + " :: HNil"
+
+      // For better formatting, split long parameter lists across lines
+      val paramList = if (i > 3) {
+        s"\n    ${abArgs.split(", ").mkString(",\n    ")},\n    op: Expr[E, $bhlist, C]"
+      } else {
+        s"$abArgs, op: Expr[E, $bhlist, C]"
+      }
 
       val s =
-        s"""
-           |def eval$i[E, A, $bs, C]($abArgs, op: Expr[E, $bhlist, C]) : Expr[E, A, C] =
-           |    Kleisli[λ[α ⇒ Term[E, α]], A, C] { source ⇒ join$i($abhlist).run(source) match {
-           |      case i @ Invalid(_) ⇒ i
-           |      case Valid(hlist) ⇒ op.run(hlist)
-           |    }}
-         """.stripMargin
+        s"""def eval$i[E, A, $bs, C]($paramList): Expr[E, A, C] =
+           |  Kleisli[Lambda[α => Term[E, α]], A, C] { source => join$i($abhlist).run(source) match {
+           |    case i @ Invalid(_) => i
+           |    case Valid(hlist) => op.run(hlist)
+           |  }}""".stripMargin
 
       println(s)
     }
+  }
+
+  /**
+   * Helper method to generate all code at once
+   */
+  def generateAll(start: Int = 1, end: Int = 10): Unit = {
+    println("// Generated Operations")
+    genOp(start, end)
+    println("\n// Generated Joins")
+    genJoin(start, end)
+    println("\n// Generated Evaluations")
+    genEval(start, end)
   }
 }

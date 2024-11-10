@@ -17,8 +17,10 @@ object Syntax {
   case class EvalError(msg: String)
 
   implicit class StrExpr(val l: Expr[EvalError, Source, String]) extends AnyVal {
-    def &(r: Expr[EvalError, Source, String]) : Expr[EvalError, Source,String] = eval2(l, r, concat)
+    def &(r: Expr[EvalError, Source, String]) : Expr[EvalError, Source, String] = eval2(l, r, concat)
     def rev : Expr[EvalError, Source, String] = eval1(l, reverse)
+    def unary_+ : Expr[EvalError, Source, String] = eval1(l, caps)
+    def unary_- : Expr[EvalError, Source, String] = eval1(l, lower)
   }
 
   def strF(k: Key) =
