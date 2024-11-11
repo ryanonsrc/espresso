@@ -2,7 +2,7 @@ package io.nary.espresso
 
 import cats.Applicative
 import cats.syntax.all._
-import cats.data.{Kleisli, NonEmptyList, Validated, ValidatedNel}
+import cats.data.Kleisli
 import cats.data.Validated.{Invalid, Valid}
 import shapeless.{::, HNil}
 

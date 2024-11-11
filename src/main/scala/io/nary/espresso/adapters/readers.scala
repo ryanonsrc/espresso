@@ -7,7 +7,7 @@ import cats.syntax.all._
 object readers {
   import defs._
 
-  implicit def strIn[E]: In[E, String] = Kleisli[λ[α ⇒ Term[E, α]], Any, String](_.toString.validNel)
+  implicit def strIn[E]: In[E, String] = Kleisli[λ[α => Term[E, α]], Any, String](_.toString.validNel)
 
   implicit def doubleIn[E](orElse: E): In[E, Double] =
     Kleisli[Lambda[α => Term[E, α]], Any, Double] { v =>
