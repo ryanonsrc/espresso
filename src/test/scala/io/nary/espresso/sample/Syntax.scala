@@ -25,9 +25,9 @@ object Syntax {
 
   def strF(k: Key) =
     read[EvalError, String, Key, Source](k, EvalError(s"key missing: $k"),
-      (s: Source) ⇒
-        (k: Key) ⇒
-          (in: In[EvalError, String]) ⇒
+      (s: Source) =>
+        (k: Key) =>
+          (in: In[EvalError, String]) =>
             s.get(k) map in.run)
 
 
@@ -35,6 +35,6 @@ object Syntax {
   implicit def strReader2(k: Key) : Expr[EvalError, Source, String] = strF(k)
 
   implicit def const[A](k: A) : Expr[EvalError, Source, A] =
-    Kleisli[λ[α ⇒ Term[EvalError, α]], Source, A] { _ ⇒ k.validNel }
+    Kleisli[λ[α => Term[EvalError, α]], Source, A] { _ => k.validNel }
 
 }

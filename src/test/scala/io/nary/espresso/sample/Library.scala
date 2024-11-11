@@ -2,7 +2,7 @@ package io.nary.espresso.sample
 
 import io.nary.espresso.defs._
 import io.nary.espresso.compose._
-import shapeless.{::, HList, HNil}
+import shapeless.{::, HNil}
 import cats.syntax.all._
 
 object Library {
