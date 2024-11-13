@@ -2,7 +2,7 @@ import ReleaseTransformations._
 
 // Build settings
 ThisBuild / organization := "io.nary"
-ThisBuild / version := "1.0.0"
+ThisBuild / version := "1.0.0-SNAPSHOT"
 ThisBuild / scalaVersion := "2.13.12"
 
 releaseProcess := Seq[ReleaseStep](
