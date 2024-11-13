@@ -1,6 +1,22 @@
+import ReleaseTransformations._
+
 // Build settings
 ThisBuild / organization := "io.nary"
+ThisBuild / version := "1.0.0"
 ThisBuild / scalaVersion := "2.13.12"
+
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  setNextVersion,
+  commitNextVersion,
+  pushChanges
+)
 
 lazy val root = (project in file("."))
   .settings(
