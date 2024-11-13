@@ -1,20 +1,19 @@
 espresso - Purely Functional Expression DSL Builder Library
-======
+===========================================================
 
 For building DSLs that allow the composition of pure and fully type-safe expressions such
 that any sub-expression may generate or receive errors as input, short-circuiting evaluation.
 
 Ordering an espresso
-------
+--------------------
 
 ```
 resolvers ++= Seq(
-    Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots")
+    "jitpack" at "https://jitpack.io"
 )
 
 libraryDependencies ++= Seq(
-    "io.nary" %% "espresso" % "0.0.1"
+    "com.github.ryanonsrc" %% "espresso" % "v1.0.0"
 )
 ```
 
@@ -22,12 +21,12 @@ espresso makes extensive use of the Typelevel cats and shapeless libraries as we
 compiler plugin.
 
 Sample expression syntax and library
-------
+------------------------------------
 
-Take a look at <https://github.com/ryanonsrc/espresso/tree/master/src/test/scala/io/nary/espresso/sample>
+Take a look at [https://github.com/ryanonsrc/espresso/tree/master/src/test/scala/io/nary/espresso/sample](https://github.com/ryanonsrc/espresso/tree/master/src/test/scala/io/nary/espresso/sample)
 
 Fundamental units of composition
------
+--------------------------------
 
 * `Term[E, A]` - Represents a **term** within an expression, evaluating to an error of type `E` or result of type `A`
 * `Expr[E, A, B]` - For any expression taking a value of type `A` and evaluating to either a result of type `B` or an error of type `E`
