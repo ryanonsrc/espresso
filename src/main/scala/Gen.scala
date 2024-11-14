@@ -21,6 +21,25 @@ object Gen {
     }
   }
 
+  def genFuncExpr(start: Int, end: Int): Unit = {
+    for (i <- start to end) {
+      val typeParams = (1 to i).map(x => s"A$x").mkString("[E, ", ", ", ", B]")
+      val hltargs = (1 to i).map(x => s"A$x").mkString(" :: ") + " :: HNil"
+      val ctargs = (1 to i).map(x => s"A$x").mkString(", ")
+      val hlargs = (1 to i).map(x => s"a$x").mkString(" :: ") + " :: HNil"
+      val args = (1 to i).map(x => s"a$x").mkString(", ")
+
+      val s =
+        s"""def funcExpr$i$typeParams(f: ($ctargs) => B)(g: String => E): Expr[E, $hltargs, B] =
+           |  Kleisli[Lambda[α => Term[E, α]], $hltargs, B] {
+           |    case $hlargs =>
+           |      Either.catchNonFatal(f($args)).leftMap(e => g(e.getMessage)).toValidatedNel
+           |  }""".stripMargin
+
+      println(s)
+    }
+  }
+
   def genJoin(start: Int, end: Int): Unit = {
     for (i <- start to end) {
       val typeParams = (1 to i).map(x => s"B$x").mkString("[E, A, ", ", ", "]")
@@ -83,5 +102,11 @@ object Gen {
     genJoin(start, end)
     println("\n// Generated Evaluations")
     genEval(start, end)
+    println("\n// Generated Lift FuncExpr")
+    genFuncExpr(start, end)
+  }
+
+  def main(args: Array[String]): Unit = {
+    generateAll()
   }
 }

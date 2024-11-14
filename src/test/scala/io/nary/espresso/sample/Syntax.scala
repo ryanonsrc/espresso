@@ -21,6 +21,7 @@ object Syntax {
     def rev : Expr[EvalError, Source, String] = eval1(l, reverse)
     def unary_+ : Expr[EvalError, Source, String] = eval1(l, caps)
     def unary_- : Expr[EvalError, Source, String] = eval1(l, lower)
+    def asInt : Expr[EvalError, Source, Int] = eval1(l, asInteger(EvalError))
   }
 
   def strF(k: Key) =
