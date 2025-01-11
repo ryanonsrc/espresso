@@ -8,12 +8,12 @@ object Gen {
       val typeParams = (1 to i).map(x => s"A$x").mkString("[E, ", ", ", ", B]")
       val fDom = (1 to i).map(x => s"Term[E, A$x]").mkString(" :: ") + " :: HNil"
       val ret = (1 to i).map(x => s"A$x").mkString(" :: ") + " :: HNil"
-      val args = (1 to i).map(x => s"a$x").mkString(" :: ") + " :: HNil"
+      val args = (1 to i).map(x => s"(a$x: A$x)").mkString(" :: ") + " :: HNil"
       val app = (1 to i).map(x => s"Applicative[Lambda[α => Term[E, α]]].pure(a$x)").mkString(" :: ") + " :: HNil"
 
       val s =
         s"""def op$i$typeParams(f: ($fDom) => Term[E, B]): Expr[E, $ret, B] =
-           |  Kleisli[Lambda[α => Term[E, α]], $ret, B] { case $args =>
+           |  Kleisli.apply[[α] =>> Term[E, α], $ret, B] { case $args =>
            |    f($app)
            |  }""".stripMargin
 
@@ -26,12 +26,12 @@ object Gen {
       val typeParams = (1 to i).map(x => s"A$x").mkString("[E, ", ", ", ", B]")
       val hltargs = (1 to i).map(x => s"A$x").mkString(" :: ") + " :: HNil"
       val ctargs = (1 to i).map(x => s"A$x").mkString(", ")
-      val hlargs = (1 to i).map(x => s"a$x").mkString(" :: ") + " :: HNil"
+      val hlargs = (1 to i).map(x => s"(a$x: A$x)").mkString(" :: ") + " :: HNil"
       val args = (1 to i).map(x => s"a$x").mkString(", ")
 
       val s =
         s"""def funcExpr$i$typeParams(f: ($ctargs) => B)(g: String => E): Expr[E, $hltargs, B] =
-           |  Kleisli[Lambda[α => Term[E, α]], $hltargs, B] {
+           |  Kleisli.apply[[α] =>> Term[E, α], $hltargs, B] {
            |    case $hlargs =>
            |      Either.catchNonFatal(f($args)).leftMap(e => g(e.getMessage)).toValidatedNel
            |  }""".stripMargin
@@ -45,7 +45,7 @@ object Gen {
       val typeParams = (1 to i).map(x => s"B$x").mkString("[E, A, ", ", ", "]")
       val operands = (1 to i).map(x => s"Expr[E, A, B$x]").mkString(" :: ") + " :: HNil"
       val ret = (1 to i).map(x => s"B$x").mkString(" :: ") + " :: HNil"
-      val args = (1 to i).map(x => s"b$x").mkString(" :: ") + " :: HNil"
+      val args = (1 to i).map(x => s"(b$x: Expr[E, A, B$x])").mkString(" :: ") + " :: HNil"
 
       // Replace |@| with modern tuple syntax and mapN
       val runCalls = (1 to i).map(x => s"b$x.run(a)")
@@ -59,7 +59,7 @@ object Gen {
 
       val s =
         s"""def join$i$typeParams(operands: $operands): Expr[E, A, $ret] =
-           |  Kleisli[Lambda[α => Term[E, α]], A, $ret] { a => operands match {
+           |  Kleisli.apply[[α] =>> Term[E, α], A, $ret] { a => operands match {
            |    case $args => $app($appMap)
            |  }}""".stripMargin
 
@@ -83,9 +83,9 @@ object Gen {
 
       val s =
         s"""def eval$i[E, A, $bs, C]($paramList): Expr[E, A, C] =
-           |  Kleisli[Lambda[α => Term[E, α]], A, C] { source => join$i($abhlist).run(source) match {
+           |  Kleisli.apply[[α] =>> Term[E, α], A, C] { source => join$i($abhlist).run(source) match {
            |    case i @ Invalid(_) => i
-           |    case Valid(hlist) => op.run(hlist)
+           |    case Valid(hlist: ($bhlist)) => op.run(hlist)
            |  }}""".stripMargin
 
       println(s)

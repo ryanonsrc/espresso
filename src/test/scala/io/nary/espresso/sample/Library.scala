@@ -1,12 +1,13 @@
 package io.nary.espresso.sample
 
-import io.nary.espresso.defs._
-import io.nary.espresso.compose._
-import io.nary.espresso.lift._
-import shapeless.{::, HNil}
-import cats.syntax.all._
+import io.nary.espresso.defs.*
+import io.nary.espresso.compose.*
+import io.nary.espresso.lift.*
+import shapeless3.typeable.*
+import shapeless3.data.{::, HNil}
+import cats.syntax.all.*
 
-object Library {
+object Library:
   /** Concatenates two strings */
   def concat[E]: Expr[E, String :: String :: HNil, String] =
     op2[E, String, String, String] {
@@ -39,5 +40,5 @@ object Library {
   def asString[E, A](err: String => E): Expr[E, Int :: HNil, String] =
     funcExpr1[E, Int, String](_.toString)(err)
 
-  def mapExpr[E, A, B](err: String => E)(f: A => B): Expr[E, A :: HNil, B] = funcExpr1[E, A, B](f)(err)
-}
+  def mapExpr[E, A, B](err: String => E)(f: A => B): Expr[E, A :: HNil, B] =
+    funcExpr1[E, A, B](f)(err)
