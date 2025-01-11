@@ -2,6 +2,7 @@ package io.nary.espresso.sample
 
 import io.nary.espresso.defs._
 import io.nary.espresso.compose._
+import io.nary.espresso.lift._
 import shapeless.{::, HNil}
 import cats.syntax.all._
 
@@ -31,4 +32,12 @@ object Library {
       case s :: HNil =>
         s.map(_.toLowerCase)
     }
+
+  def asInteger[E, A](err: String => E): Expr[E, String :: HNil, Int] =
+    funcExpr1[E, String, Int](_.toInt)(err)
+
+  def asString[E, A](err: String => E): Expr[E, Int :: HNil, String] =
+    funcExpr1[E, Int, String](_.toString)(err)
+
+  def mapExpr[E, A, B](err: String => E)(f: A => B): Expr[E, A :: HNil, B] = funcExpr1[E, A, B](f)(err)
 }
