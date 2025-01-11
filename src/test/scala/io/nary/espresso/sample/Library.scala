@@ -33,12 +33,11 @@ object Library {
         s.map(_.toLowerCase)
     }
 
-  // TODO: These are a bit contrived examples -- will replace with better ones to illustrate funcExprN combinators
-
   def asInteger[E, A](err: String => E): Expr[E, String :: HNil, Int] =
     funcExpr1[E, String, Int](_.toInt)(err)
 
   def asString[E, A](err: String => E): Expr[E, Int :: HNil, String] =
     funcExpr1[E, Int, String](_.toString)(err)
 
+  def mapExpr[E, A, B](err: String => E)(f: A => B): Expr[E, A :: HNil, B] = funcExpr1[E, A, B](f)(err)
 }

@@ -23,13 +23,14 @@ object Syntax {
     def unary_+ : Expr[EvalError, Source, String] = eval1(l, caps)
     def unary_- : Expr[EvalError, Source, String] = eval1(l, lower)
     def asInt : Expr[EvalError, Source, Int] = eval1(l, asInteger(EvalError))
+    def ^=>(f: String => String) : Expr[EvalError, Source, String] = eval1(l, mapExpr(EvalError)(f))
   }
 
   implicit class IntExpr(val l: Expr[EvalError, Source, Int]) extends AnyVal {
     def asStr : Expr[EvalError, Source, String] = eval1(l, asString(EvalError))
   }
 
-  def strF(k: Key) =
+  def strF(k: Key): Expr[EvalError, Source, String] =
     read[EvalError, String, Key, Source](k, EvalError(s"key missing: $k"),
       (s: Source) =>
         (k: Key) =>
