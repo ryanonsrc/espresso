@@ -10,7 +10,8 @@ object Main {
 
     import Syntax._
 
-    val expr = "foo".rev & +"bar" & -"baz".rev & ("5".asInt.asStr)
+//    val expr = "foo".rev & +"bar" & -"baz".rev & ("50".asInt.asStr)
+    val expr = "foo".rev & +"bar" & +(-"baz").rev & (str("50").asInt.asStr)
 
     val result = expr.run(map)
 

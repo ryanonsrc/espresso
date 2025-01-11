@@ -22,15 +22,11 @@ object Syntax {
     def rev : Expr[EvalError, Source, String] = eval1(l, reverse)
     def unary_+ : Expr[EvalError, Source, String] = eval1(l, caps)
     def unary_- : Expr[EvalError, Source, String] = eval1(l, lower)
-  }
-
-  implicit class StrExpr(val l: String) extends AnyVal {
-    def asInt : Expr[EvalError, String, Int] = eval1(l, asInteger(EvalError))
+    def asInt : Expr[EvalError, Source, Int] = eval1(l, asInteger(EvalError))
   }
 
   implicit class IntExpr(val l: Expr[EvalError, Source, Int]) extends AnyVal {
-    // TODO: a bit contrived -- replace with a better example library function
-    def asStr : Expr[EvalError, Source, String] = eval1(1, asString(EvalError))
+    def asStr : Expr[EvalError, Source, String] = eval1(l, asString(EvalError))
   }
 
   def strF(k: Key) =
@@ -40,7 +36,8 @@ object Syntax {
           (in: In[EvalError, String]) =>
             s.get(k) map in.run)
 
+  def str(s: String) : Expr[EvalError, Source, String] = const(s)
 
-  implicit def strReader1(k: Key) : StrExpr = strF(k)
+  implicit def strReader1(k: Key) : LookupExpr = strF(k)
   implicit def strReader2(k: Key) : Expr[EvalError, Source, String] = strF(k)
 }
