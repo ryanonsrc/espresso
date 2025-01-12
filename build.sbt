@@ -2,7 +2,7 @@ import ReleaseTransformations._
 
 // Build settings
 ThisBuild / organization := "io.nary"
-ThisBuild / version := "1.1.0-SNAPSHOT"
+ThisBuild / version := "1.1.1-SNAPSHOT"
 ThisBuild / scalaVersion := "3.3.1"
 
 ThisBuild / releaseProcess := Seq[ReleaseStep](
@@ -20,8 +20,8 @@ ThisBuild / releaseProcess := Seq[ReleaseStep](
 
 ThisBuild / publishTo := Some(MavenCache("local-maven", file("/tmp/maven")))
 
-ThisBuild / publishMavenStyle := true
-ThisBuild / credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
+//ThisBuild / publishMavenStyle := true
+//ThisBuild / credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
 
 // Useful for troubleshooting
 //ThisBuild / maxErrors := 1
