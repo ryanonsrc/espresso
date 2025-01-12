@@ -18,6 +18,9 @@ ThisBuild / releaseProcess := Seq[ReleaseStep](
   pushChanges
 )
 
+// Useful for troubleshooting
+ThisBuild / maxErrors := 1
+
 lazy val root = (project in file("."))
   .settings(
     name := "espresso",
@@ -30,9 +33,6 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-core" % "2.10.0",
       "org.typelevel" %% "algebra" % "2.10.0",
-      "org.typelevel" %% "shapeless3-typeable" % "3.3.0",
-
-// Test dependencies
       "org.scalatest" %% "scalatest" % "3.2.17" % Test
     ),
 
