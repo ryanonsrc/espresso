@@ -18,6 +18,13 @@ ThisBuild / releaseProcess := Seq[ReleaseStep](
   pushChanges
 )
 
+ThisBuild / publishTo := Some(
+  if (isSnapshot.value)
+    "Sonatype Snapshots".at("https://oss.sonatype.org/content/repositories/snapshots")
+  else
+    "Sonatype Releases".at("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+)
+
 // Useful for troubleshooting
 //ThisBuild / maxErrors := 1
 
