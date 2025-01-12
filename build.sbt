@@ -25,6 +25,9 @@ ThisBuild / publishTo := Some(
     "Sonatype Releases".at("https://oss.sonatype.org/service/local/staging/deploy/maven2")
 )
 
+ThisBuild / publishMavenStyle := true
+ThisBuild / credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
+
 // Useful for troubleshooting
 //ThisBuild / maxErrors := 1
 
