@@ -18,12 +18,7 @@ ThisBuild / releaseProcess := Seq[ReleaseStep](
   pushChanges
 )
 
-ThisBuild / publishTo := Some(
-  if (isSnapshot.value)
-    "Sonatype Snapshots".at("https://oss.sonatype.org/content/repositories/snapshots")
-  else
-    "Sonatype Releases".at("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-)
+ThisBuild / publishTo := Some(MavenCache("local-maven", file("/tmp/maven")))
 
 ThisBuild / publishMavenStyle := true
 ThisBuild / credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
