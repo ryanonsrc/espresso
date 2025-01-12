@@ -47,7 +47,5 @@ object Syntax:
     )
 
   def str(s: String): Expr[EvalError, Source, String] = const(s)
-
-  //given strReader1: (k: Key) => LookupExpr = k => LookupExpr(strF(k))
-
+  
   given Conversion[Key, Expr[EvalError, Source, String]] = strF(_)
