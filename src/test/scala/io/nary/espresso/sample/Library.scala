@@ -9,17 +9,17 @@ object Library:
   /** Concatenates two strings */
   def concat[E]: Expr[E, (String, String), String] =
     op2[E, String, String, String] {
-      case (l, r) => (l, r).mapN(_ + _)
+      case (l, r) => (l, r).mapN((_ + _))
     }
 
   /** Reverses a string */
-  def reverse[E]: Expr[E, String :: HNil, String] =
+  def reverse[E]: Expr[E, String, String] =
     op1[E, String, String](_.map(_.reverse))
 
-  def caps[E]: Expr[E, String :: HNil, String] =
+  def caps[E]: Expr[E, String, String] =
     op1[E, String, String] (_.map(_.toUpperCase))
 
-  def lower[E]: Expr[E, String :: HNil, String] =
+  def lower[E]: Expr[E, String, String] =
     op1[E, String, String] (_.map(_.toLowerCase))
 
   def asInteger[E, A](err: String => E): Expr[E, String, Int] =

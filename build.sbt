@@ -19,7 +19,7 @@ ThisBuild / releaseProcess := Seq[ReleaseStep](
 )
 
 // Useful for troubleshooting
-ThisBuild / maxErrors := 1
+//ThisBuild / maxErrors := 1
 
 lazy val root = (project in file("."))
   .settings(

@@ -9,6 +9,7 @@ object Syntax:
   import defs.*
   import compose.*
   import readers.*
+  import readers.given 
   import lift.*
   import Library.*
 
@@ -27,13 +28,13 @@ object Syntax:
     def unary_- : Expr[EvalError, Source, String] =
       eval1(l, lower)
     def asInt: Expr[EvalError, Source, Int] =
-      eval1(l, asInteger(EvalError))
+      eval1(l, asInteger(EvalError.apply))
     def ^=>(f: String => String): Expr[EvalError, Source, String] =
-      eval1(l, mapExpr(EvalError)(f))
+      eval1(l, mapExpr(EvalError.apply)(f))
 
   extension (l: Expr[EvalError, Source, Int])
     def asStr: Expr[EvalError, Source, String] =
-      eval1(l, asString(EvalError))
+      eval1(l, asString(EvalError.apply))
 
   def strF(k: Key): Expr[EvalError, Source, String] =
     read[EvalError, String, Key, Source](
@@ -47,7 +48,6 @@ object Syntax:
 
   def str(s: String): Expr[EvalError, Source, String] = const(s)
 
-  given strReader1(k: Key): LookupExpr =
-    LookupExpr(strF(k))
+  //given strReader1: (k: Key) => LookupExpr = k => LookupExpr(strF(k))
 
   given Conversion[Key, Expr[EvalError, Source, String]] = strF(_)
