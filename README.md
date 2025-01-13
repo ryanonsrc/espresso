@@ -35,7 +35,7 @@ Fundamental combinators (i.e. units of composition)
 * `joinN[E, A, B1, ... BN]` - combine an tuple of `N` expressions: `Expr[E, A, Bi]` into a single `Expr[E, A, (B1,...,BN)]`
 * `evalN[E, A, B1, ... BN, C]` - Given `N` expressions: `Expr[E, A, Bi]` and operation: `Expr[E, (B1,...,BN), C]`, generate `Expr[E, A, C]`
 
-## Fundamental units of composition
+## _`lift`ing_ functions and values into `Expr`essions
 
 * `const[E, A, B`- _lift_ a value of type`B`directly into an expression (bypassing the need to _read_ from a weakly-typed source`A`)
 * `error[E, A, B]` - _lift_ an error instance of type `E` directly into an expression (bypassing the need to _read_ from a weakly-typed source `A`)
