@@ -13,7 +13,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-    "com.github.ryanonsrc" %% "espresso" % "v1.1.1"
+    "com.github.ryanonsrc" % "espresso" % "v1.1.4"
 )
 ```
 
