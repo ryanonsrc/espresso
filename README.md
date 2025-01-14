@@ -43,7 +43,7 @@ Fundamental combinators (i.e. units of composition)
 
 ## Visualizing Expression Composition
 
-<img src"./Visualize-Composition.png" width="50%">
+![Visualization of Composition](https://github.com/ryanonsrc/espresso/blob/cleanup/Visualize-Composition.png)
 
 ## Quick-Start Guide for building a DSL
 
