@@ -37,9 +37,13 @@ Fundamental combinators (i.e. units of composition)
 
 ## _`lift`ing_ functions and values into `Expr`essions
 
-* `const[E, A, B`- _lift_ a value of type`B`directly into an expression (bypassing the need to _read_ from a weakly-typed source`A`)
+* `const[E, A, B]`- _lift_ a value of type`B`directly into an expression (bypassing the need to _read_ from a weakly-typed source`A`)
 * `error[E, A, B]` - _lift_ an error instance of type `E` directly into an expression (bypassing the need to _read_ from a weakly-typed source `A`)
 * `funcExprN[E, A1,... AN, B]` - _lift_ functions of type `(A1, ..., AN) => B` `String => E` (for errors) into the expression: `Expr[E, (A1,...,AN), B]`
+
+## Visualizing Expression Composition
+
+![Visualization of Composition](https://github.com/ryanonsrc/espresso/blob/cleanup/Visualize-Composition.png)
 
 ## Quick-Start Guide for building a DSL
 
